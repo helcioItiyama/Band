@@ -1,25 +1,51 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import { Dimensions } from 'react-native';
+import {StyleSheet, Animated} from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
 import theme from '../../global/styles/theme';
 
-import {Container, Name} from './_BandName';
+import {Container, Wrap,Name} from './_BandName';
 
 interface IBandName {
   band: {
     id: string;
     name: string;
   };
+  y: Animated.Value;
+  index: number;
   getBandAlbum: (bandId: string) => void;
 }
 
-export const BandName: React.FC<IBandName> = ({band, getBandAlbum}) => {
+const {height} = Dimensions.get('window')
+
+export const BandName: React.FC<IBandName> = ({band, getBandAlbum, y, index}) => {
+  const sizeOfItem = height * 0.1;
+  const position = Animated.subtract(index * sizeOfItem, y);
+  const isDisappearing = - sizeOfItem;
+  const isTop = 0;
+  const isBottom = height - (sizeOfItem * 4);
+  const isAppearing = height -( sizeOfItem * 2);
+
+  const scale = position.interpolate({
+    inputRange: [isDisappearing, isTop, isBottom, isAppearing],
+    outputRange: [0.5, 1, 1, 0.5],
+    extrapolate: 'clamp'
+  });
+  const opacity = position.interpolate({
+    inputRange: [isDisappearing, isTop, isBottom, isAppearing],
+    outputRange: [0.5, 1, 1, 0.5],
+    extrapolate: 'clamp'
+  });
   return (
-    <DropShadow style={styles.shadow}>
+    <Animated.View style={[{opacity, height: sizeOfItem}, {transform: [{scale}]}]}>
       <Container onPress={() => getBandAlbum(band.id)}>
-        <Name>{band.name}</Name>
+        <DropShadow style={styles.shadow}>
+          <Wrap>
+            <Name>{band.name}</Name>
+          </Wrap>
+        </DropShadow>
       </Container>
-    </DropShadow>
+    </Animated.View>
   );
 };
 
@@ -31,6 +57,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 3,
-    shadowColor: theme.colors.primary10,
+    shadowColor: theme.colors.secondary
+    ,
   },
 });

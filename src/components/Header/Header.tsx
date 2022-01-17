@@ -13,11 +13,11 @@ interface IHeader {
 export const Header: React.FC<IHeader> = ({title, toGoBack}) => {
   const {goBack} = useNavigation();
 
-  function renderLeftIcon() {
+  const renderLeftIcon = () => {
     if (toGoBack) {
       return (
         <GoBack onPress={goBack}>
-          <Icon name="back" type="antdesign" color={theme.colors.white} />
+          <Icon name="chevron-back-outline" type="ionicon" color={theme.colors.secondaryLight} />
         </GoBack>
       );
     }

@@ -6,7 +6,7 @@ const {width, height} = Dimensions.get('window');
 
 export const Container = styled.View`
   height: ${height * 0.1}px;
-  background-color: ${({theme}) => theme.colors.dark3d};
+  background-color: ${({theme}) => theme.colors.primary};
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -15,7 +15,7 @@ export const Container = styled.View`
 export const Title = styled.Text`
   font-family: ${({theme}) => theme.fontFamily.bold};
   font-size: ${RFPercentage(3)}px;
-  color: ${({theme}) => theme.colors.white};
+  color: ${({theme}) => theme.colors.secondaryLight};
 `;
 
 export const GoBack = styled.TouchableOpacity`

@@ -11,19 +11,18 @@
 import React from 'react';
 import {SafeAreaView} from 'react-native';
 import {ThemeProvider} from 'styled-components';
-import {Provider} from 'react-redux';
 import theme from './src/global/styles/theme';
 import {Route} from './src/routes/Route';
-import {store} from './src/store/store';
+import {RecoilRoot} from 'recoil';
 
 export const App: React.FC = () => {
   return (
     <SafeAreaView style={{flex: 1}}>
-      <Provider store={store}>
+      <RecoilRoot>
         <ThemeProvider theme={theme}>
           <Route />
         </ThemeProvider>
-      </Provider>
+      </RecoilRoot>
     </SafeAreaView>
   );
 };

@@ -1,18 +1,22 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {Dimensions, FlatList, StyleSheet} from 'react-native';
+import {ActivityIndicator, Dimensions, StyleSheet} from 'react-native';
 import {Overlay} from 'react-native-elements';
-import {useDispatch} from 'react-redux';
-import {AlbumDto} from '../../dtos/AlbumDto';
-import {RootStackParamList} from '../../routes/Route';
-import {SET_ALBUM} from '../../store/Album/actionTypes';
-import {AlbumTypes} from '../../store/Album/types';
+import { useSetRecoilState } from 'recoil';
+import FastImage from 'react-native-fast-image';
+import Swiper from 'react-native-swiper';
 
-import {ImageButton, Image} from './_SwipeImageModal';
+import {AlbumDto} from '../../dtos/AlbumDto';
+import {MainStack} from '../../routes/Route';
+import theme from '../../global/styles/theme';
+
+import {ImageButton} from './_SwipeImageModal';
+import { albumState } from '../../atoms/albumAtom';
 
 interface ISwipeImageModal {
   albumBand: AlbumDto[];
   showAlbumImage: boolean;
+  loading: boolean;
   setShowAlbumImage: (type: boolean) => void;
 }
 
@@ -20,42 +24,59 @@ const {height} = Dimensions.get('window');
 
 export const SwipeImageModal: React.FC<ISwipeImageModal> = ({
   albumBand,
+  loading,
   showAlbumImage,
   setShowAlbumImage,
 }) => {
-  const dispatch = useDispatch();
-  const {navigate} = useNavigation<RootStackParamList>();
+  const {navigate} = useNavigation<MainStack>();
+  const setAlbum = useSetRecoilState(albumState);
 
-  function dispatchAlbum(band: AlbumDto) {
-    dispatch<AlbumTypes>({
-      type: SET_ALBUM,
-      payload: band,
-  ;
+  const dispatchAlbum = (band: AlbumDto) => {
+    setAlbum(band)
     navigate('AlbumDetail');
+  }
+
+  const renderPhotos = () => {
+    return albumBand.map(item => (
+      <ImageButton key={item.id} onPress={() => dispatchAlbum(item)}>
+        <FastImage 
+          style={{width: '100%', height: '100%'}}
+          source={{uri: item.image, priority: FastImage.priority.high}} 
+          resizeMode={FastImage.resizeMode.contain} 
+          />
+      </ImageButton>
+    ));
   }
 
   return (
     <Overlay
       isVisible={showAlbumImage}
-      overlayStyle={styles.overlay}
+      overlayStyle={[styles.overlay, {
+        backgroundColor: loading ? 'transparent' : 'white',
+        elevation: loading ? 0 : 2
+      }]}
       onBackdropPress={() => setShowAlbumImage(false)}>
-      <FlatList
-        data={albumBand}
-        horizontal
-        keyExtractor={item => item.id}
-        renderItem={({item}) => (
-          <ImageButton onPress={() => dispatchAlbum(item)}>
-            <Image source={{uri: item.image}} />
-          </ImageButton>
-        )}
-      />
+      {!loading && !!albumBand.length ? (
+        <Swiper
+          showsButtons
+          dotColor={theme.colors.secondaryLight}
+          activeDotColor={theme.colors.secondary}>
+          {renderPhotos()}
+        </Swiper>
+      ) : (
+        <ActivityIndicator 
+          size='large' 
+          color={theme.colors.white}
+        />
+      )}
     </Overlay>
   );
 };
 
 const styles = StyleSheet.create({
   overlay: {
-    height: height * 0.6,
+    height: height * 0.5,
     alignItems: 'center',
+    justifyContent: 'center'
   },
 });

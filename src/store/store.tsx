@@ -7,7 +7,7 @@ export interface RootState {
 }
 
 const reducer = combineReducers({
-  feed: albumReducer,
+  album: albumReducer,
 });
 
 const INITIAL_STATE = {};

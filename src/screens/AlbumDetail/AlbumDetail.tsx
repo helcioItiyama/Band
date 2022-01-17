@@ -1,39 +1,72 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {FlatList} from 'react-native';
-import {useSelector} from 'react-redux';
-import {AlbumState} from '../../store/Album/types';
-import {RootState} from '../../store/store';
+import FastImage from 'react-native-fast-image';
+import { useRecoilValue } from 'recoil';
+import { albumState } from '../../atoms/albumAtom';
+
+import { Header } from '../../components/Header/Header';
 
 import {
   Container,
-  Image,
+  Main,
+  ImageWrap,
+  Info,
   Name,
+  Song,
   Release,
   Wrap,
-  Photo,
   Duration,
 } from './_AlbumDetail';
 
 export const AlbumDetail: React.FC = () => {
-  const {album} = useSelector<RootState, AlbumState>(state => state.album);
-
-  console.log('album', album);
+  const album = useRecoilValue(albumState);
+  const duration = useCallback((time: number) => {
+    const length = time.toString().length
+    if(length <= 1) {
+      return "0:00"
+    }
+    if(length === 2) {
+      return `0:${time}`
+    }
+    if(length > 2 && length < 4) {
+      return `${time.toString().substring(0,1)}:${time.toString().substring(1)}`
+    }
+    return `${time.toString().substring(0,2)}:${time.toString().substring(1)}`
+  }, [album]);
+  
   return (
     <Container>
-      <Image source={{uri: album.image}} />
-      <Name>{album.name}</Name>
-      <Release>{album.releaseDate}</Release>
-      <FlatList
-        data={album.tracks}
-        keyExtractor={item => item.id}
-        renderItem={({item}) => (
-          <Wrap>
-            <Photo source={{uri: item.image}} />
-            <Name>{item.name}</Name>
-            <Duration>{item.duration}</Duration>
-          </Wrap>
-        )}
-      />
+      <Header title={album.name} toGoBack/>
+      <Main>
+        <FlatList
+          data={album.tracks}
+          keyExtractor={item => item.id}
+          ListHeaderComponent={() => (  
+            <>
+              <ImageWrap>
+                {album.image ? (
+                  <FastImage 
+                  style={{width: '100%', height: '100%'}}
+                  source={{uri: album.image, priority: FastImage.priority.high}} 
+                  resizeMode={FastImage.resizeMode.contain}
+                  />
+                ) : (
+                  <Info>No Image</Info>
+                  )}
+              </ImageWrap>
+              <Name>{album.name}</Name>
+              <Release>{album.releaseDate}</Release>
+            </>
+
+          )}
+          renderItem={({item}) => (
+            <Wrap>
+              <Song>{item.name}</Song>
+              <Duration>{duration(item.duration)}</Duration>
+            </Wrap>
+          )}
+          />
+      </Main>
     </Container>
   );
 };
