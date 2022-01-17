@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import {FlatList} from 'react-native';
+import React, { useCallback, useRef } from 'react';
+import {Animated, Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useRecoilValue } from 'recoil';
 import { albumState } from '../../atoms/albumAtom';
@@ -18,8 +18,12 @@ import {
   Duration,
 } from './_AlbumDetail';
 
+const {width} = Dimensions.get('window');
+
 export const AlbumDetail: React.FC = () => {
   const album = useRecoilValue(albumState);
+  const y = useRef(new Animated.Value(0)).current;
+
   const duration = useCallback((time: number) => {
     const length = time.toString().length
     if(length <= 1) {
@@ -34,16 +38,28 @@ export const AlbumDetail: React.FC = () => {
     return `${time.toString().substring(0,2)}:${time.toString().substring(1)}`
   }, [album]);
   
+  const onScroll = Animated.event([{nativeEvent: {contentOffset: {y}}}], {useNativeDriver: false})
+
+  const scale = y.interpolate({
+    inputRange: [0, width * 0.8],
+    outputRange: [1, 0],
+    extrapolate: 'clamp'
+  })
+
+  const translateY = Animated.divide(y, 2)
+
   return (
     <Container>
       <Header title={album.name} toGoBack/>
       <Main>
-        <FlatList
+        <Animated.FlatList
           data={album.tracks}
           keyExtractor={item => item.id}
           ListHeaderComponent={() => (  
             <>
-              <ImageWrap>
+              <ImageWrap
+                style={{transform: [{translateY}, {scale}]}}
+              >
                 {album.image ? (
                   <FastImage 
                   style={{width: '100%', height: '100%'}}
@@ -59,6 +75,8 @@ export const AlbumDetail: React.FC = () => {
             </>
 
           )}
+          bounces={false}
+          {...{onScroll}}
           renderItem={({item}) => (
             <Wrap>
               <Song>{item.name}</Song>

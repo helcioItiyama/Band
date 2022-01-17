@@ -1,4 +1,4 @@
-import {Dimensions} from 'react-native';
+import {Animated, Dimensions} from 'react-native';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
@@ -14,13 +14,13 @@ export const Main = styled.View`
   background-color: ${({theme}) => theme.colors.secondary};
 `;
 
-export const ImageWrap = styled.View`
+export const ImageWrap = styled(Animated.View)`
   align-self: center;
   background-color: ${({theme}) => theme.colors.grey};
-  width: ${width * 0.8}px;
-  height: ${width * 0.8}px;
   align-items: center;
   justify-content: center;
+  height: ${width * 0.8}px;
+  width: ${width * 0.8}px;
 `;
 
 export const Info = styled.Text`
