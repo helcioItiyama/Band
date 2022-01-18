@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Dimensions, StyleSheet} from 'react-native';
 import {Overlay} from 'react-native-elements';
@@ -18,6 +17,7 @@ interface ISwipeImageModal {
   albumBand: AlbumDto[];
   showAlbumImage: boolean;
   setShowAlbumImage: (type: boolean) => void;
+  navigation: MainStack
 };
 
 const {height} = Dimensions.get('window');
@@ -26,14 +26,16 @@ export const SwipeImageModal: React.FC<ISwipeImageModal> = ({
   albumBand,
   showAlbumImage,
   setShowAlbumImage,
+  navigation,
 }) => {
   const type = useRecoilValue(themeType);
-  const {navigate} = useNavigation<MainStack>();
   const setAlbum = useSetRecoilState(albumState);
 
   const dispatchAlbum = (band: AlbumDto) => {
     setAlbum(band);
-    navigate('AlbumDetail');
+    setTimeout(() => {
+      navigation.push('AlbumDetail');
+    }, 1000)
   };
 
   const renderPhotos = () => {

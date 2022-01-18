@@ -14,6 +14,7 @@ import {Container} from './_Home';
 import { useRecoilValue } from 'recoil';
 import { themeType } from '../../atoms/typeAtom';
 import { storage } from '../../utils/storage';
+import { MainStack } from '../../routes/Route';
 
 const {width, height} = Dimensions.get('window');
 
@@ -22,7 +23,11 @@ type BandNames = {
   name: string;
 }
 
-export const Home: React.FC = () => {
+interface HomeProps {
+  navigation: MainStack;
+}
+
+export const Home: React.FC<HomeProps> = ({navigation}) => {
   const [albums, setAlbums] = useState<AlbumDto[]>([]);
   const [bandNames, setBandNames] = useState<BandNames[]>([]);
   const [selectedAlbum, setSelectedAlbum] = useState<AlbumDto[]>([]);
@@ -109,7 +114,7 @@ export const Home: React.FC = () => {
       />
       <SwipeImageModal
         albumBand={selectedAlbum}
-        {...{showAlbumImage, setShowAlbumImage}}
+        {...{showAlbumImage, setShowAlbumImage, navigation}}
       />
     </Container>
   );

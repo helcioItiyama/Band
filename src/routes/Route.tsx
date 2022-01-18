@@ -22,7 +22,8 @@ export const Route: React.FC = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Home"
-        screenOptions={{headerShown: false}}>
+        screenOptions={{headerShown: false}}
+      >
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="AlbumDetail" component={AlbumDetail} />
       </Stack.Navigator>
