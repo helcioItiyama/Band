@@ -9,20 +9,20 @@
  */
 
 import React from 'react';
-import {SafeAreaView} from 'react-native';
+import {StatusBar} from 'react-native';
 import {ThemeProvider} from 'styled-components';
+import {RecoilRoot} from 'recoil';
+
 import theme from './src/global/styles/theme';
 import {Route} from './src/routes/Route';
-import {RecoilRoot} from 'recoil';
+import { themeType } from './src/atoms/typeAtom';
 
 export const App: React.FC = () => {
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <RecoilRoot>
-        <ThemeProvider theme={theme}>
-          <Route />
-        </ThemeProvider>
-      </RecoilRoot>
-    </SafeAreaView>
+    <RecoilRoot>
+      <ThemeProvider theme={theme}>
+        <Route />
+      </ThemeProvider>
+    </RecoilRoot>
   );
 };

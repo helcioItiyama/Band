@@ -1,46 +1,51 @@
 import {Animated, Dimensions} from 'react-native';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
+import { Theme } from '../../atoms/typeAtom';
 
 const {width, height} = Dimensions.get('window');
+
+interface Props {
+  type: Theme;
+}
 
 export const Container = styled.View`
   flex: 1;
 `;
 
-export const Main = styled.View`
+export const Main = styled.View<Props>`
   flex: 1;
   padding: ${width * 0.04}px;
-  background-color: ${({theme}) => theme.colors.secondary};
+  background-color: ${({theme, type}) => theme.colors[type].secondary};
 `;
 
-export const ImageWrap = styled(Animated.View)`
+export const ImageWrap = styled(Animated.View)<Props>`
   align-self: center;
-  background-color: ${({theme}) => theme.colors.grey};
+  background-color: ${({theme, type}) => theme.colors[type].grey};
   align-items: center;
   justify-content: center;
   height: ${width * 0.8}px;
   width: ${width * 0.8}px;
 `;
 
-export const Info = styled.Text`
+export const Info = styled.Text<Props>`
   font-family: ${({theme}) => theme.fontFamily.medium};
-  color: ${({theme}) => theme.colors.primary};
+  color: ${({theme, type}) => theme.colors[type].primary};
   font-size: ${RFPercentage(3)}px;
 `;
 
-export const Name = styled.Text`
+export const Name = styled.Text<Props>`
   font-family: ${({theme}) => theme.fontFamily.bold};
   font-size: ${RFPercentage(3)}px;
-  color: ${({theme}) => theme.colors.primary};
+  color: ${({theme, type}) => theme.colors[type].primary};
   text-align: center;
   margin-top: ${height * 0.02}px;
   text-decoration: underline;
 `;
 
-export const Song = styled.Text`
+export const Song = styled.Text<Props>`
   font-family: ${({theme}) => theme.fontFamily.regular};
-  color: ${({theme}) => theme.colors.primary};
+  color: ${({theme, type}) => theme.colors[type].primary};
   font-size: ${RFPercentage(2)}px;
   flex: 1;
 `;
@@ -54,4 +59,8 @@ export const Wrap = styled.View`
   padding-horizontal: ${width * 0.04}px;
 `;
 
-export const Duration = styled.Text``;
+export const Duration = styled.Text<Props>`
+  font-family: ${({theme}) => theme.fontFamily.regular};
+  color: ${({theme, type}) => theme.colors[type].primary};
+  font-size: ${RFPercentage(2)}px;
+`;

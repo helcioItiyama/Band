@@ -1,8 +1,8 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {ActivityIndicator, Dimensions, StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {Overlay} from 'react-native-elements';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import FastImage from 'react-native-fast-image';
 import Swiper from 'react-native-swiper';
 
@@ -12,29 +12,29 @@ import theme from '../../global/styles/theme';
 
 import {ImageButton} from './_SwipeImageModal';
 import { albumState } from '../../atoms/albumAtom';
+import { themeType } from '../../atoms/typeAtom';
 
 interface ISwipeImageModal {
   albumBand: AlbumDto[];
   showAlbumImage: boolean;
-  loading: boolean;
   setShowAlbumImage: (type: boolean) => void;
-}
+};
 
 const {height} = Dimensions.get('window');
 
 export const SwipeImageModal: React.FC<ISwipeImageModal> = ({
   albumBand,
-  loading,
   showAlbumImage,
   setShowAlbumImage,
 }) => {
+  const type = useRecoilValue(themeType);
   const {navigate} = useNavigation<MainStack>();
   const setAlbum = useSetRecoilState(albumState);
 
   const dispatchAlbum = (band: AlbumDto) => {
-    setAlbum(band)
+    setAlbum(band);
     navigate('AlbumDetail');
-  }
+  };
 
   const renderPhotos = () => {
     return albumBand.map(item => (
@@ -46,29 +46,19 @@ export const SwipeImageModal: React.FC<ISwipeImageModal> = ({
           />
       </ImageButton>
     ));
-  }
+  };
 
   return (
     <Overlay
-      isVisible={showAlbumImage}
-      overlayStyle={[styles.overlay, {
-        backgroundColor: loading ? 'transparent' : 'white',
-        elevation: loading ? 0 : 2
-      }]}
+      isVisible={showAlbumImage && !!albumBand.length}
+      overlayStyle={styles.overlay}
       onBackdropPress={() => setShowAlbumImage(false)}>
-      {!loading && !!albumBand.length ? (
         <Swiper
           showsButtons
-          dotColor={theme.colors.secondaryLight}
-          activeDotColor={theme.colors.secondary}>
+          dotColor={theme.colors[type].secondaryLight}
+          activeDotColor={theme.colors[type].secondary}>
           {renderPhotos()}
         </Swiper>
-      ) : (
-        <ActivityIndicator 
-          size='large' 
-          color={theme.colors.white}
-        />
-      )}
     </Overlay>
   );
 };

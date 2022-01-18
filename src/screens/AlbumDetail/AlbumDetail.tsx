@@ -1,10 +1,12 @@
 import React, { useCallback, useRef } from 'react';
-import {Animated, Dimensions} from 'react-native';
+import {ActivityIndicator, Animated, Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useRecoilValue } from 'recoil';
-import { albumState } from '../../atoms/albumAtom';
 
+import { albumState } from '../../atoms/albumAtom';
+import { themeType } from '../../atoms/typeAtom';
 import { Header } from '../../components/Header/Header';
+import theme from '../../global/styles/theme';
 
 import {
   Container,
@@ -22,6 +24,7 @@ const {width} = Dimensions.get('window');
 
 export const AlbumDetail: React.FC = () => {
   const album = useRecoilValue(albumState);
+  const type = useRecoilValue(themeType);
   const y = useRef(new Animated.Value(0)).current;
 
   const duration = useCallback((time: number) => {
@@ -38,26 +41,27 @@ export const AlbumDetail: React.FC = () => {
     return `${time.toString().substring(0,2)}:${time.toString().substring(1)}`
   }, [album]);
   
-  const onScroll = Animated.event([{nativeEvent: {contentOffset: {y}}}], {useNativeDriver: false})
+  const onScroll = Animated.event([{nativeEvent: {contentOffset: {y}}}], {useNativeDriver: false});
 
   const scale = y.interpolate({
     inputRange: [0, width * 0.8],
     outputRange: [1, 0],
     extrapolate: 'clamp'
-  })
+  });
 
-  const translateY = Animated.divide(y, 2)
+  const translateY = Animated.divide(y, 2);
 
   return (
     <Container>
       <Header title={album.name} toGoBack/>
-      <Main>
+      <Main {...{type}}>
         <Animated.FlatList
           data={album.tracks}
           keyExtractor={item => item.id}
           ListHeaderComponent={() => (  
             <>
               <ImageWrap
+                {...{type}}
                 style={{transform: [{translateY}, {scale}]}}
               >
                 {album.image ? (
@@ -67,10 +71,10 @@ export const AlbumDetail: React.FC = () => {
                   resizeMode={FastImage.resizeMode.contain}
                   />
                 ) : (
-                  <Info>No Image</Info>
+                  <Info {...{type}}>No Image</Info>
                   )}
               </ImageWrap>
-              <Name>{album.name}</Name>
+              <Name {...{type}}>{album.name}</Name>
               <Release>{album.releaseDate}</Release>
             </>
 
@@ -79,10 +83,11 @@ export const AlbumDetail: React.FC = () => {
           {...{onScroll}}
           renderItem={({item}) => (
             <Wrap>
-              <Song>{item.name}</Song>
-              <Duration>{duration(item.duration)}</Duration>
+              <Song {...{type}}>{item.name}</Song>
+              <Duration {...{type}}>{duration(item.duration)}</Duration>
             </Wrap>
           )}
+          ListEmptyComponent={<ActivityIndicator size="small" color={theme.colors[type].primary}/>}
           />
       </Main>
     </Container>

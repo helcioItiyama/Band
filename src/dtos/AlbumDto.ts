@@ -12,4 +12,4 @@ export interface AlbumDto {
   name: string;
   releaseDate: string;
   tracks: Tracks[];
-}
+};

@@ -2,6 +2,8 @@ import React from 'react';
 import { Dimensions } from 'react-native';
 import {StyleSheet, Animated} from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
+import { useRecoilValue } from 'recoil';
+import { themeType, Theme } from '../../atoms/typeAtom';
 import theme from '../../global/styles/theme';
 
 import {Container, Wrap,Name} from './_BandName';
@@ -14,11 +16,12 @@ interface IBandName {
   y: Animated.Value;
   index: number;
   getBandAlbum: (bandId: string) => void;
-}
+};
 
-const {height} = Dimensions.get('window')
+const {height} = Dimensions.get('window');
 
 export const BandName: React.FC<IBandName> = ({band, getBandAlbum, y, index}) => {
+  const type = useRecoilValue(themeType);
   const sizeOfItem = height * 0.1;
   const position = Animated.subtract(index * sizeOfItem, y);
   const isDisappearing = - sizeOfItem;
@@ -39,9 +42,9 @@ export const BandName: React.FC<IBandName> = ({band, getBandAlbum, y, index}) =>
   return (
     <Animated.View style={[{opacity, height: sizeOfItem}, {transform: [{scale}]}]}>
       <Container onPress={() => getBandAlbum(band.id)}>
-        <DropShadow style={styles.shadow}>
-          <Wrap>
-            <Name>{band.name}</Name>
+        <DropShadow style={styles(type).shadow}>
+          <Wrap {...{type}}>
+            <Name{...{type}}>{band.name}</Name>
           </Wrap>
         </DropShadow>
       </Container>
@@ -49,7 +52,7 @@ export const BandName: React.FC<IBandName> = ({band, getBandAlbum, y, index}) =>
   );
 };
 
-const styles = StyleSheet.create({
+const styles = (type: Theme) => StyleSheet.create({
   shadow: {
     shadowOffset: {
       width: 0,
@@ -57,7 +60,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 3,
-    shadowColor: theme.colors.secondary
-    ,
-  },
+    shadowColor: theme.colors[type].secondary
+  }
 });

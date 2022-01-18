@@ -1,52 +1,103 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React, {useCallback, useRef, useState} from 'react';
 import {Alert, Animated, Dimensions} from 'react-native';
+import NetInfo from "@react-native-community/netinfo";
+
 import {BandName} from '../../components/BandName/BandName';
 import {Header} from '../../components/Header/Header';
 import {SwipeImageModal} from '../../components/SwipeImageModal/SwipeImageModal';
 import bands from '../../services/bands.json';
 import {AlbumDto} from '../../dtos/AlbumDto';
-import { api } from '../../services/api';
+import { getAlbums } from '../../services/api';
 
 import {Container} from './_Home';
+import { useRecoilValue } from 'recoil';
+import { themeType } from '../../atoms/typeAtom';
+import { storage } from '../../utils/storage';
 
 const {width, height} = Dimensions.get('window');
 
+type BandNames = {
+  id: string;
+  name: string;
+}
+
 export const Home: React.FC = () => {
+  const [albums, setAlbums] = useState<AlbumDto[]>([]);
+  const [bandNames, setBandNames] = useState<BandNames[]>([]);
   const [selectedAlbum, setSelectedAlbum] = useState<AlbumDto[]>([]);
   const [showAlbumImage, setShowAlbumImage] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const type = useRecoilValue(themeType);
   const y = useRef(new Animated.Value(0)).current;
 
   useFocusEffect(useCallback(() => {
     return () => {
-      setShowAlbumImage(false)
+      setShowAlbumImage(false);
      }
-  }, []))
+  }, []));
 
-  const getBandAlbum = async (id: string) => {
+  useFocusEffect(useCallback(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      getBandNames(state.isConnected);
+      getAllAlbums(state.isConnected);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []));
+
+  const getBandNames = async (connected: boolean | null) => {
     try {
-      setLoading(true)
-      setShowAlbumImage(true);
-      const {data} = await api.get('/');
-      const selectedBandAlbum = data.filter((band: AlbumDto) => {
-        return band.band === id;
-      });
-      setSelectedAlbum(selectedBandAlbum);
-    } catch(err) {
-      Alert.alert('Aviso','Houve algum imprevisto. Por favor, tente mais tarde, novamente.')
-    } finally {
-      setLoading(false)
+      const items = await storage.get('bands');
+      if(items) {
+        setBandNames(items);
+        return;
+      }
+      if(connected) {
+        await storage.set<BandNames[]>('bands', bands.bands);
+        setBandNames(bands.bands);
+      }
+    } catch(err: any) {
+      Alert.alert('Aviso', 'Houve um imprevisto. Por favor, tente mais tarde novamente.');
     }
-  }
+  };
 
-  const onScroll = Animated.event([{nativeEvent: {contentOffset: {y}}}], {useNativeDriver: true})
+  const getAllAlbums = async (connected: boolean | null) => {
+    try {
+      const items = await storage.get('albums');
+      if(items) {
+        setAlbums(items);
+        return;
+      }
+      if(connected) {
+        const allAlbums = await getAlbums();
+        await storage.set<AlbumDto[]>('albums', allAlbums);
+        setAlbums(allAlbums);
+      }
+    } catch(err: any) {
+      Alert.alert('Aviso','Houve algum imprevisto. Por favor, tente mais tarde, novamente.');
+    }
+  };
+  
+  const getBandAlbum = (id: string) => {
+    try {
+      const selectedBandAlbum = albums.filter((band: AlbumDto) => {
+        return band.band === id;
+      }); 
+      setSelectedAlbum(selectedBandAlbum);
+      setShowAlbumImage(true);
+    } catch(err) {
+      Alert.alert('Aviso','Houve algum imprevisto. Por favor, tente mais tarde, novamente.');
+    }
+  };
+
+  const onScroll = Animated.event([{nativeEvent: {contentOffset: {y}}}], {useNativeDriver: true});
 
   return (
-    <Container>
+    <Container {...{type}}>
       <Header title="Rock Bands" />
       <Animated.FlatList
-        data={bands.bands}
+        data={bandNames}
         bounces={false}
         scrollEventThrottle={16}
         keyExtractor={item => item.id}
@@ -58,7 +109,7 @@ export const Home: React.FC = () => {
       />
       <SwipeImageModal
         albumBand={selectedAlbum}
-        {...{showAlbumImage, setShowAlbumImage, loading}}
+        {...{showAlbumImage, setShowAlbumImage}}
       />
     </Container>
   );

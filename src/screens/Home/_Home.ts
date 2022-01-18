@@ -1,6 +1,11 @@
 import styled from 'styled-components/native';
+import { Theme } from '../../atoms/typeAtom';
 
-export const Container = styled.View`
+interface Props {
+  type: Theme;
+}
+
+export const Container = styled.View<Props>`
   flex: 1;
-  background-color: ${({theme}) => theme.colors.secondaryMedium};
+  background-color: ${({theme, type}) => theme.colors[type].secondary};
 `;
