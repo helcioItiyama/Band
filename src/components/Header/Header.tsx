@@ -2,10 +2,9 @@ import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Dimensions, StatusBar} from 'react-native';
 import {Icon} from 'react-native-elements';
-import {useRecoilValue, useSetRecoilState} from 'recoil';
 
-import {Theme, themeState, themeType} from '../../atoms/typeAtom';
 import theme from '../../global/styles/theme';
+import themeStore from '../../mobxStore/themeStore';
 
 import {Container, Title, Toggle, GoBack} from './_Header';
 
@@ -16,11 +15,10 @@ interface IHeader {
 
 const {height} = Dimensions.get('window');
 
-export const Header: React.FC<IHeader> = ({title, toGoBack}) => {
-  const type = useRecoilValue<Theme>(themeType);
-  const toggle = useSetRecoilState(themeState);
+export const Header = ({title, toGoBack}: IHeader) => {
   const {goBack} = useNavigation();
-
+  const type = themeStore.type;
+  
   const renderLeftIcon = () => {
     if (toGoBack) {
       return (
@@ -28,7 +26,7 @@ export const Header: React.FC<IHeader> = ({title, toGoBack}) => {
           <Icon 
             name="chevron-back-outline" 
             type="ionicon" 
-            color={theme.colors[type].secondaryLight} 
+            color={theme.colors[themeStore.type].secondaryLight} 
             />
         </GoBack>
       );
@@ -47,7 +45,7 @@ export const Header: React.FC<IHeader> = ({title, toGoBack}) => {
       <Toggle
         style={{height: height * 0.04}}
         value={type === 'dark'}
-        onValueChange={() => toggle()}
+        onValueChange={() => themeStore.toggle()}
       />
     </Container>
   );

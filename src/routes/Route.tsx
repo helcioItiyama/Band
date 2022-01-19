@@ -17,7 +17,7 @@ export type MainStack = NativeStackNavigationProp<RootStackParamList>;
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-export const Route: React.FC = () => {
+export const Route = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator

@@ -2,15 +2,15 @@ import {useFocusEffect} from '@react-navigation/native';
 import React, {useCallback, useRef, useState} from 'react';
 import {Alert, Animated, Dimensions} from 'react-native';
 import NetInfo from "@react-native-community/netinfo";
-import { useRecoilValue } from 'recoil';
+import { observer } from 'mobx-react';
 
 import {BandName} from '../../components/BandName/BandName';
 import {Header} from '../../components/Header/Header';
 import {SwipeImageModal} from '../../components/SwipeImageModal/SwipeImageModal';
+import themeStore from '../../mobxStore/themeStore';
 import bands from '../../services/bands.json';
 import {AlbumDto} from '../../dtos/AlbumDto';
 import {getAlbums} from '../../services/api';
-import {themeType} from '../../atoms/typeAtom';
 import {storage} from '../../utils/storage';
 import {MainStack} from '../../routes/Route';
 
@@ -27,12 +27,12 @@ interface HomeProps {
   navigation: MainStack;
 }
 
-export const Home: React.FC<HomeProps> = ({navigation}) => {
+export const Home = observer(({navigation}: HomeProps) => {
   const [albums, setAlbums] = useState<AlbumDto[]>([]);
   const [bandNames, setBandNames] = useState<BandNames[]>([]);
   const [selectedAlbum, setSelectedAlbum] = useState<AlbumDto[]>([]);
   const [showAlbumImage, setShowAlbumImage] = useState(false);
-  const type = useRecoilValue(themeType);
+  const type = themeStore.type;
   const y = useRef(new Animated.Value(0)).current;
 
   useFocusEffect(useCallback(() => {
@@ -100,7 +100,7 @@ export const Home: React.FC<HomeProps> = ({navigation}) => {
 
   return (
     <Container {...{type}}>
-      <Header title="Rock Bands" />
+      <Header title="Rock Bands" {...{type}} />
       <Animated.FlatList
         data={bandNames}
         bounces={false}
@@ -108,14 +108,15 @@ export const Home: React.FC<HomeProps> = ({navigation}) => {
         keyExtractor={item => item.id}
         contentContainerStyle={{marginHorizontal: width * 0.06, marginVertical: height * 0.04}}
         renderItem={({item, index}) => (
-          <BandName band={item} {...{getBandAlbum, y, index}} />
+          <BandName band={item} {...{getBandAlbum, type, y, index}} />
         )}
         {...{onScroll}}
       />
       <SwipeImageModal
         albumBand={selectedAlbum}
-        {...{showAlbumImage, setShowAlbumImage, navigation}}
+        {...{showAlbumImage, setShowAlbumImage, type, navigation}}
       />
     </Container>
   );
-};
+});
+

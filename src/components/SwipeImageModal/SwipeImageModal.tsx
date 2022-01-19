@@ -1,15 +1,14 @@
 import React from 'react';
 import {Dimensions, StyleSheet} from 'react-native';
 import {Overlay} from 'react-native-elements';
-import {useRecoilValue, useSetRecoilState} from 'recoil';
 import FastImage from 'react-native-fast-image';
 import Swiper from 'react-native-swiper';
 
 import {AlbumDto} from '../../dtos/AlbumDto';
 import {MainStack} from '../../routes/Route';
 import theme from '../../global/styles/theme';
-import { albumState } from '../../atoms/albumAtom';
-import { themeType } from '../../atoms/typeAtom';
+import albumStore from '../../mobxStore/albumStore';
+import themeStore from '../../mobxStore/themeStore';
 
 import {ImageButton} from './_SwipeImageModal';
 
@@ -17,22 +16,20 @@ interface ISwipeImageModal {
   albumBand: AlbumDto[];
   showAlbumImage: boolean;
   setShowAlbumImage: (type: boolean) => void;
-  navigation: MainStack
+  navigation: MainStack;
 };
 
 const {height} = Dimensions.get('window');
 
-export const SwipeImageModal: React.FC<ISwipeImageModal> = ({
+export const SwipeImageModal = ({
   albumBand,
   showAlbumImage,
   setShowAlbumImage,
   navigation,
-}) => {
-  const type = useRecoilValue(themeType);
-  const setAlbum = useSetRecoilState(albumState);
-
+}:ISwipeImageModal) => {
+  const type = themeStore.type;
   const dispatchAlbum = (band: AlbumDto) => {
-    setAlbum(band);
+    albumStore.setAlbum(band);
     setTimeout(() => {
       navigation.push('AlbumDetail');
     }, 1000)

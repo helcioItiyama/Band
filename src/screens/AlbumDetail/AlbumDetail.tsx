@@ -1,12 +1,12 @@
+import { observer } from 'mobx-react';
 import React, {useCallback, useRef} from 'react';
 import {ActivityIndicator, Animated, Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {useRecoilValue} from 'recoil';
 
-import {albumState} from '../../atoms/albumAtom';
-import {themeType} from '../../atoms/typeAtom';
 import {Header} from '../../components/Header/Header';
 import theme from '../../global/styles/theme';
+import albumStore from '../../mobxStore/albumStore';
+import themeStore from '../../mobxStore/themeStore';
 
 import {
   Container,
@@ -22,9 +22,9 @@ import {
 
 const {width} = Dimensions.get('window');
 
-export const AlbumDetail: React.FC = () => {
-  const album = useRecoilValue(albumState);
-  const type = useRecoilValue(themeType);
+export const AlbumDetail = observer(() => {
+  const album = albumStore.album;
+  const type = themeStore.type;
   const y = useRef(new Animated.Value(0)).current;
 
   const duration = useCallback((time: number) => {
@@ -53,7 +53,7 @@ export const AlbumDetail: React.FC = () => {
 
   return (
     <Container>
-      <Header title={album.name} toGoBack/>
+      <Header title={album.name} {...{type}} toGoBack/>
       <Main {...{type}}>
         <Animated.FlatList
           data={album.tracks}
@@ -92,4 +92,4 @@ export const AlbumDetail: React.FC = () => {
       </Main>
     </Container>
   );
-};
+});
