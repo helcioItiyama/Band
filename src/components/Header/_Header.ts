@@ -3,7 +3,7 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 import Constants from 'expo-constants';
 
-import { Theme } from '../../atoms/typeAtom';
+import {Theme} from '../../atoms/typeAtom';
 
 const {width, height} = Dimensions.get('window');
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Dimensions } from 'react-native';
-import {StyleSheet, Animated} from 'react-native';
+import {StyleSheet, Animated, Dimensions} from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
-import { useRecoilValue } from 'recoil';
-import { themeType, Theme } from '../../atoms/typeAtom';
+import {useRecoilValue} from 'recoil';
+
+import {themeType, Theme} from '../../atoms/typeAtom';
 import theme from '../../global/styles/theme';
 
 import {Container, Wrap,Name} from './_BandName';

@@ -1,11 +1,11 @@
-import React, { useCallback, useRef } from 'react';
+import React, {useCallback, useRef} from 'react';
 import {ActivityIndicator, Animated, Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { useRecoilValue } from 'recoil';
+import {useRecoilValue} from 'recoil';
 
-import { albumState } from '../../atoms/albumAtom';
-import { themeType } from '../../atoms/typeAtom';
-import { Header } from '../../components/Header/Header';
+import {albumState} from '../../atoms/albumAtom';
+import {themeType} from '../../atoms/typeAtom';
+import {Header} from '../../components/Header/Header';
 import theme from '../../global/styles/theme';
 
 import {

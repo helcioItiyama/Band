@@ -1,20 +1,20 @@
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import React, {useCallback, useRef, useState} from 'react';
 import {Alert, Animated, Dimensions} from 'react-native';
 import NetInfo from "@react-native-community/netinfo";
+import { useRecoilValue } from 'recoil';
 
 import {BandName} from '../../components/BandName/BandName';
 import {Header} from '../../components/Header/Header';
 import {SwipeImageModal} from '../../components/SwipeImageModal/SwipeImageModal';
 import bands from '../../services/bands.json';
 import {AlbumDto} from '../../dtos/AlbumDto';
-import { getAlbums } from '../../services/api';
+import {getAlbums} from '../../services/api';
+import {themeType} from '../../atoms/typeAtom';
+import {storage} from '../../utils/storage';
+import {MainStack} from '../../routes/Route';
 
 import {Container} from './_Home';
-import { useRecoilValue } from 'recoil';
-import { themeType } from '../../atoms/typeAtom';
-import { storage } from '../../utils/storage';
-import { MainStack } from '../../routes/Route';
 
 const {width, height} = Dimensions.get('window');
 

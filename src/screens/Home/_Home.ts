@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { Theme } from '../../atoms/typeAtom';
+import {Theme} from '../../atoms/typeAtom';
 
 interface Props {
   type: Theme;
