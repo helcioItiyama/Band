@@ -4,8 +4,7 @@ import {Dimensions, StatusBar} from 'react-native';
 import {Icon} from 'react-native-elements';
 
 import theme from '../../global/styles/theme';
-import { useAppDispatch, useAppSelector } from '../../toolkitStore/reduxHooks';
-import { themeState, toggleTheme } from '../../toolkitStore/themeReducer';
+import themeStore from '../../mobxStore/themeStore';
 
 import {Container, Title, Toggle, GoBack} from './_Header';
 
@@ -18,8 +17,7 @@ const {height} = Dimensions.get('window');
 
 export const Header = ({title, toGoBack}: IHeader) => {
   const {goBack} = useNavigation();
-  const {type} = useAppSelector(themeState);
-  const dipatch = useAppDispatch();
+  const type = themeStore.type;
   
   const renderLeftIcon = () => {
     if (toGoBack) {
@@ -28,7 +26,7 @@ export const Header = ({title, toGoBack}: IHeader) => {
           <Icon 
             name="chevron-back-outline" 
             type="ionicon" 
-            color={theme.colors[type].secondaryLight} 
+            color={theme.colors[themeStore.type].secondaryLight} 
             />
         </GoBack>
       );
@@ -47,7 +45,7 @@ export const Header = ({title, toGoBack}: IHeader) => {
       <Toggle
         style={{height: height * 0.04}}
         value={type === 'dark'}
-        onValueChange={() => {dipatch(toggleTheme())}}
+        onValueChange={() => themeStore.toggle()}
       />
     </Container>
   );

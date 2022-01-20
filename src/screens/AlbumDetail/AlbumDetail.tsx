@@ -1,12 +1,12 @@
+import { observer } from 'mobx-react';
 import React, {useCallback, useRef} from 'react';
 import {ActivityIndicator, Animated, Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import {Header} from '../../components/Header/Header';
-import { useAppSelector } from '../../toolkitStore/reduxHooks';
-import { themeState } from '../../toolkitStore/themeReducer';
-import { albumState } from '../../toolkitStore/albumReducer';
 import theme from '../../global/styles/theme';
+import albumStore from '../../mobxStore/albumStore';
+import themeStore from '../../mobxStore/themeStore';
 
 import {
   Container,
@@ -22,10 +22,9 @@ import {
 
 const {width} = Dimensions.get('window');
 
-export const AlbumDetail = () => {
-  const {album} = useAppSelector(albumState);
-  const {type} = useAppSelector(themeState);
-  
+export const AlbumDetail = observer(() => {
+  const album = albumStore.album;
+  const type = themeStore.type;
   const y = useRef(new Animated.Value(0)).current;
 
   const duration = useCallback((time: number) => {
@@ -93,4 +92,4 @@ export const AlbumDetail = () => {
       </Main>
     </Container>
   );
-};
+});

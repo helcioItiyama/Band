@@ -3,8 +3,7 @@ import {StyleSheet, Animated, Dimensions} from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
 
 import theme from '../../global/styles/theme';
-import { useAppSelector } from '../../toolkitStore/reduxHooks';
-import { themeState, ThemeType } from '../../toolkitStore/themeReducer';
+import themeStore, {ThemeType} from '../../mobxStore/themeStore';
 
 import {Container, Wrap,Name} from './_BandName';
 
@@ -22,7 +21,7 @@ const {height} = Dimensions.get('window');
 
 export const BandName = ({band, getBandAlbum, y, index}: IBandName) => {
   const sizeOfItem = height * 0.1;
-  const {type} = useAppSelector(themeState); 
+  const type = themeStore.type;
   const position = Animated.subtract(index * sizeOfItem, y);
   const isDisappearing = - sizeOfItem;
   const isTop = 0;
