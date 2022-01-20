@@ -9,15 +9,19 @@
  */
 
 import React from 'react';
+import { Provider } from 'react-redux';
 import {ThemeProvider} from 'styled-components';
 
 import theme from './src/global/styles/theme';
 import {Route} from './src/routes/Route';
+import store from './src/toolkitStore/store';
 
 export const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Route />
-    </ThemeProvider>
+    <Provider {...{store}}>
+      <ThemeProvider theme={theme}>
+        <Route />
+      </ThemeProvider>
+    </Provider>
   );
 };

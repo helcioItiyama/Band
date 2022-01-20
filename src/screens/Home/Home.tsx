@@ -2,17 +2,17 @@ import {useFocusEffect} from '@react-navigation/native';
 import React, {useCallback, useRef, useState} from 'react';
 import {Alert, Animated, Dimensions} from 'react-native';
 import NetInfo from "@react-native-community/netinfo";
-import { observer } from 'mobx-react';
 
 import {BandName} from '../../components/BandName/BandName';
 import {Header} from '../../components/Header/Header';
 import {SwipeImageModal} from '../../components/SwipeImageModal/SwipeImageModal';
-import themeStore from '../../mobxStore/themeStore';
 import bands from '../../services/bands.json';
 import {AlbumDto} from '../../dtos/AlbumDto';
 import {getAlbums} from '../../services/api';
 import {storage} from '../../utils/storage';
 import {MainStack} from '../../routes/Route';
+import { useAppSelector } from '../../toolkitStore/reduxHooks';
+import { themeState } from '../../toolkitStore/themeReducer';
 
 import {Container} from './_Home';
 
@@ -27,12 +27,12 @@ interface HomeProps {
   navigation: MainStack;
 }
 
-export const Home = observer(({navigation}: HomeProps) => {
+export const Home = ({navigation}: HomeProps) => {
   const [albums, setAlbums] = useState<AlbumDto[]>([]);
   const [bandNames, setBandNames] = useState<BandNames[]>([]);
   const [selectedAlbum, setSelectedAlbum] = useState<AlbumDto[]>([]);
   const [showAlbumImage, setShowAlbumImage] = useState(false);
-  const type = themeStore.type;
+  const {type} = useAppSelector(themeState);
   const y = useRef(new Animated.Value(0)).current;
 
   useFocusEffect(useCallback(() => {
@@ -118,5 +118,5 @@ export const Home = observer(({navigation}: HomeProps) => {
       />
     </Container>
   );
-});
+};
 
