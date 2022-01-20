@@ -2,12 +2,12 @@ import {Dimensions} from 'react-native';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
-import {Theme} from '../../atoms/typeAtom';
+import { ThemeType } from '../../store/themeReducer';
 
 const {width} = Dimensions.get('window');
 
 interface Props {
-  type: Theme;
+  type: ThemeType;
 }
 
 export const Container = styled.TouchableOpacity``;
