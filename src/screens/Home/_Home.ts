@@ -1,8 +1,8 @@
 import styled from 'styled-components/native';
-import {Theme} from '../../atoms/typeAtom';
+import { ThemeType } from '../../store/themeStore';
 
 interface Props {
-  type: Theme;
+  type: ThemeType;
 }
 
 export const Container = styled.View<Props>`

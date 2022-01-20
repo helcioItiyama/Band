@@ -3,12 +3,12 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 import Constants from 'expo-constants';
 
-import {Theme} from '../../atoms/typeAtom';
+import { ThemeType } from '../../store/themeStore';
 
 const {width, height} = Dimensions.get('window');
 
 interface Props {
-  type: Theme;
+  type: ThemeType;
 }
 
 const statusbarHeight = Constants.statusBarHeight;

@@ -5,8 +5,8 @@ import FastImage from 'react-native-fast-image';
 
 import {Header} from '../../components/Header/Header';
 import theme from '../../global/styles/theme';
-import albumStore from '../../mobxStore/albumStore';
-import themeStore from '../../mobxStore/themeStore';
+import albumStore from '../../store/albumStore';
+import themeStore from '../../store/themeStore';
 
 import {
   Container,

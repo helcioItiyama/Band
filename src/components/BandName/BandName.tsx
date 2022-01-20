@@ -3,7 +3,7 @@ import {StyleSheet, Animated, Dimensions} from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
 
 import theme from '../../global/styles/theme';
-import themeStore, {ThemeType} from '../../mobxStore/themeStore';
+import themeStore, {ThemeType} from '../../store/themeStore';
 
 import {Container, Wrap,Name} from './_BandName';
 

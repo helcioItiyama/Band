@@ -7,7 +7,7 @@ import { observer } from 'mobx-react';
 import {BandName} from '../../components/BandName/BandName';
 import {Header} from '../../components/Header/Header';
 import {SwipeImageModal} from '../../components/SwipeImageModal/SwipeImageModal';
-import themeStore from '../../mobxStore/themeStore';
+import themeStore from '../../store/themeStore';
 import bands from '../../services/bands.json';
 import {AlbumDto} from '../../dtos/AlbumDto';
 import {getAlbums} from '../../services/api';

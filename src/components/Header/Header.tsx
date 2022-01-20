@@ -4,7 +4,7 @@ import {Dimensions, StatusBar} from 'react-native';
 import {Icon} from 'react-native-elements';
 
 import theme from '../../global/styles/theme';
-import themeStore from '../../mobxStore/themeStore';
+import themeStore from '../../store/themeStore';
 
 import {Container, Title, Toggle, GoBack} from './_Header';
 

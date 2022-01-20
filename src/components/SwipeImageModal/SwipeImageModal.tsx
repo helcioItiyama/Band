@@ -7,8 +7,8 @@ import Swiper from 'react-native-swiper';
 import {AlbumDto} from '../../dtos/AlbumDto';
 import {MainStack} from '../../routes/Route';
 import theme from '../../global/styles/theme';
-import albumStore from '../../mobxStore/albumStore';
-import themeStore from '../../mobxStore/themeStore';
+import albumStore from '../../store/albumStore';
+import themeStore from '../../store/themeStore';
 
 import {ImageButton} from './_SwipeImageModal';
 
