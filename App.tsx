@@ -8,20 +8,19 @@
  * @format
  */
 
-import React from 'react';
-import { Provider } from 'react-redux';
-import {ThemeProvider} from 'styled-components';
-
-import theme from './src/global/styles/theme';
-import {Route} from './src/routes/Route';
-import store from './src/toolkitStore/store';
-
-export const App = () => {
-  return (
-    <Provider {...{store}}>
-      <ThemeProvider theme={theme}>
-        <Route />
-      </ThemeProvider>
-    </Provider>
-  );
-};
+ import React from 'react';
+ import {ThemeProvider} from 'styled-components';
+ import {RecoilRoot} from 'recoil';
+ 
+ import theme from './src/global/styles/theme';
+ import {Route} from './src/routes/Route';
+ 
+ export const App: React.FC = () => {
+   return (
+     <RecoilRoot>
+       <ThemeProvider {...{theme}}>
+         <Route />
+       </ThemeProvider>
+     </RecoilRoot>
+   );
+ };

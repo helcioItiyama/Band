@@ -1,39 +1,38 @@
 import React from 'react';
 import {Dimensions, StyleSheet} from 'react-native';
 import {Overlay} from 'react-native-elements';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import FastImage from 'react-native-fast-image';
 import Swiper from 'react-native-swiper';
 
 import {AlbumDto} from '../../dtos/AlbumDto';
 import {MainStack} from '../../routes/Route';
+import { albumState } from '../../atoms/albumAtom';
+import { themeType } from '../../atoms/typeAtom';
 import theme from '../../global/styles/theme';
 
 import {ImageButton} from './_SwipeImageModal';
-import { useDispatch } from 'react-redux';
-import { setAlbum } from '../../toolkitStore/albumReducer';
-import { useAppSelector } from '../../toolkitStore/reduxHooks';
-import { themeState } from '../../toolkitStore/themeReducer';
 
 interface ISwipeImageModal {
   albumBand: AlbumDto[];
   showAlbumImage: boolean;
   setShowAlbumImage: (type: boolean) => void;
-  navigation: MainStack;
+  navigation: MainStack
 };
 
 const {height} = Dimensions.get('window');
 
-export const SwipeImageModal = ({
+export const SwipeImageModal: React.FC<ISwipeImageModal> = ({
   albumBand,
   showAlbumImage,
   setShowAlbumImage,
   navigation,
-}:ISwipeImageModal) => {
-  const dispatch = useDispatch();
-  const {type} = useAppSelector(themeState);
+}) => {
+  const type = useRecoilValue(themeType);
+  const setAlbum = useSetRecoilState(albumState);
 
   const dispatchAlbum = (band: AlbumDto) => {
-    dispatch(setAlbum(band))
+    setAlbum(band);
     setTimeout(() => {
       navigation.push('AlbumDetail');
     }, 1000)

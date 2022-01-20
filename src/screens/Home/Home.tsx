@@ -1,18 +1,18 @@
-import {useFocusEffect} from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import React, {useCallback, useRef, useState} from 'react';
 import {Alert, Animated, Dimensions} from 'react-native';
 import NetInfo from "@react-native-community/netinfo";
+import { useRecoilValue } from 'recoil';
 
 import {BandName} from '../../components/BandName/BandName';
 import {Header} from '../../components/Header/Header';
 import {SwipeImageModal} from '../../components/SwipeImageModal/SwipeImageModal';
-import bands from '../../services/bands.json';
+import { getAlbums } from '../../services/api';
+import { themeType } from '../../atoms/typeAtom';
+import { storage } from '../../utils/storage';
+import { MainStack } from '../../routes/Route';
 import {AlbumDto} from '../../dtos/AlbumDto';
-import {getAlbums} from '../../services/api';
-import {storage} from '../../utils/storage';
-import {MainStack} from '../../routes/Route';
-import { useAppSelector } from '../../toolkitStore/reduxHooks';
-import { themeState } from '../../toolkitStore/themeReducer';
+import bands from '../../services/bands.json';
 
 import {Container} from './_Home';
 
@@ -27,12 +27,12 @@ interface HomeProps {
   navigation: MainStack;
 }
 
-export const Home = ({navigation}: HomeProps) => {
+export const Home: React.FC<HomeProps> = ({navigation}) => {
   const [albums, setAlbums] = useState<AlbumDto[]>([]);
   const [bandNames, setBandNames] = useState<BandNames[]>([]);
   const [selectedAlbum, setSelectedAlbum] = useState<AlbumDto[]>([]);
   const [showAlbumImage, setShowAlbumImage] = useState(false);
-  const {type} = useAppSelector(themeState);
+  const type = useRecoilValue(themeType);
   const y = useRef(new Animated.Value(0)).current;
 
   useFocusEffect(useCallback(() => {
@@ -100,7 +100,7 @@ export const Home = ({navigation}: HomeProps) => {
 
   return (
     <Container {...{type}}>
-      <Header title="Rock Bands" {...{type}} />
+      <Header title="Rock Bands" />
       <Animated.FlatList
         data={bandNames}
         bounces={false}
@@ -108,15 +108,14 @@ export const Home = ({navigation}: HomeProps) => {
         keyExtractor={item => item.id}
         contentContainerStyle={{marginHorizontal: width * 0.06, marginVertical: height * 0.04}}
         renderItem={({item, index}) => (
-          <BandName band={item} {...{getBandAlbum, type, y, index}} />
+          <BandName band={item} {...{getBandAlbum, y, index}} />
         )}
         {...{onScroll}}
       />
       <SwipeImageModal
         albumBand={selectedAlbum}
-        {...{showAlbumImage, setShowAlbumImage, type, navigation}}
+        {...{showAlbumImage, setShowAlbumImage, navigation}}
       />
     </Container>
   );
 };
-

@@ -2,10 +2,10 @@ import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Dimensions, StatusBar} from 'react-native';
 import {Icon} from 'react-native-elements';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
 
+import {Theme, themeState, themeType} from '../../atoms/typeAtom';
 import theme from '../../global/styles/theme';
-import { useAppDispatch, useAppSelector } from '../../toolkitStore/reduxHooks';
-import { themeState, toggleTheme } from '../../toolkitStore/themeReducer';
 
 import {Container, Title, Toggle, GoBack} from './_Header';
 
@@ -16,11 +16,11 @@ interface IHeader {
 
 const {height} = Dimensions.get('window');
 
-export const Header = ({title, toGoBack}: IHeader) => {
+export const Header: React.FC<IHeader> = ({title, toGoBack}) => {
+  const type = useRecoilValue<Theme>(themeType);
+  const toggle = useSetRecoilState(themeState);
   const {goBack} = useNavigation();
-  const {type} = useAppSelector(themeState);
-  const dipatch = useAppDispatch();
-  
+
   const renderLeftIcon = () => {
     if (toGoBack) {
       return (
@@ -47,7 +47,7 @@ export const Header = ({title, toGoBack}: IHeader) => {
       <Toggle
         style={{height: height * 0.04}}
         value={type === 'dark'}
-        onValueChange={() => {dipatch(toggleTheme())}}
+        onValueChange={() => toggle()}
       />
     </Container>
   );

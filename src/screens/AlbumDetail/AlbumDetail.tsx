@@ -1,11 +1,11 @@
-import React, {useCallback, useRef} from 'react';
+import React, { useCallback, useRef } from 'react';
 import {ActivityIndicator, Animated, Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { useRecoilValue } from 'recoil';
 
-import {Header} from '../../components/Header/Header';
-import { useAppSelector } from '../../toolkitStore/reduxHooks';
-import { themeState } from '../../toolkitStore/themeReducer';
-import { albumState } from '../../toolkitStore/albumReducer';
+import { albumState } from '../../atoms/albumAtom';
+import { themeType } from '../../atoms/typeAtom';
+import { Header } from '../../components/Header/Header';
 import theme from '../../global/styles/theme';
 
 import {
@@ -22,10 +22,9 @@ import {
 
 const {width} = Dimensions.get('window');
 
-export const AlbumDetail = () => {
-  const {album} = useAppSelector(albumState);
-  const {type} = useAppSelector(themeState);
-  
+export const AlbumDetail: React.FC = () => {
+  const album = useRecoilValue(albumState);
+  const type = useRecoilValue(themeType);
   const y = useRef(new Animated.Value(0)).current;
 
   const duration = useCallback((time: number) => {
@@ -54,7 +53,7 @@ export const AlbumDetail = () => {
 
   return (
     <Container>
-      <Header title={album.name} {...{type}} toGoBack/>
+      <Header title={album.name} toGoBack/>
       <Main {...{type}}>
         <Animated.FlatList
           data={album.tracks}

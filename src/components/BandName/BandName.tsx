@@ -1,10 +1,11 @@
 import React from 'react';
-import {StyleSheet, Animated, Dimensions} from 'react-native';
+import { Dimensions } from 'react-native';
+import {StyleSheet, Animated} from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
+import { useRecoilValue } from 'recoil';
 
+import { themeType, Theme } from '../../atoms/typeAtom';
 import theme from '../../global/styles/theme';
-import { useAppSelector } from '../../toolkitStore/reduxHooks';
-import { themeState, ThemeType } from '../../toolkitStore/themeReducer';
 
 import {Container, Wrap,Name} from './_BandName';
 
@@ -20,9 +21,9 @@ interface IBandName {
 
 const {height} = Dimensions.get('window');
 
-export const BandName = ({band, getBandAlbum, y, index}: IBandName) => {
+export const BandName: React.FC<IBandName> = ({band, getBandAlbum, y, index}) => {
+  const type = useRecoilValue(themeType);
   const sizeOfItem = height * 0.1;
-  const {type} = useAppSelector(themeState); 
   const position = Animated.subtract(index * sizeOfItem, y);
   const isDisappearing = - sizeOfItem;
   const isTop = 0;
@@ -52,7 +53,7 @@ export const BandName = ({band, getBandAlbum, y, index}: IBandName) => {
   );
 };
 
-const styles = (type: ThemeType) => StyleSheet.create({
+const styles = (type: Theme) => StyleSheet.create({
   shadow: {
     shadowOffset: {
       width: 0,
