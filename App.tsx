@@ -14,7 +14,7 @@ import {ThemeProvider} from 'styled-components';
 
 import theme from './src/global/styles/theme';
 import {Route} from './src/routes/Route';
-import store from './src/toolkitStore/store';
+import store from './src/store/store';
 
 export const App = () => {
   return (

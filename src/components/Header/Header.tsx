@@ -4,8 +4,8 @@ import {Dimensions, StatusBar} from 'react-native';
 import {Icon} from 'react-native-elements';
 
 import theme from '../../global/styles/theme';
-import { useAppDispatch, useAppSelector } from '../../toolkitStore/reduxHooks';
-import { themeState, toggleTheme } from '../../toolkitStore/themeReducer';
+import { useAppDispatch, useAppSelector } from '../../store/reduxHooks';
+import { themeState, toggleTheme } from '../../store/themeReducer';
 
 import {Container, Title, Toggle, GoBack} from './_Header';
 

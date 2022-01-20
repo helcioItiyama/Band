@@ -7,12 +7,11 @@ import Swiper from 'react-native-swiper';
 import {AlbumDto} from '../../dtos/AlbumDto';
 import {MainStack} from '../../routes/Route';
 import theme from '../../global/styles/theme';
+import { setAlbum } from '../../store/albumReducer';
+import { useAppDispatch, useAppSelector } from '../../store/reduxHooks';
+import { themeState } from '../../store/themeReducer';
 
 import {ImageButton} from './_SwipeImageModal';
-import { useDispatch } from 'react-redux';
-import { setAlbum } from '../../toolkitStore/albumReducer';
-import { useAppSelector } from '../../toolkitStore/reduxHooks';
-import { themeState } from '../../toolkitStore/themeReducer';
 
 interface ISwipeImageModal {
   albumBand: AlbumDto[];
@@ -29,7 +28,7 @@ export const SwipeImageModal = ({
   setShowAlbumImage,
   navigation,
 }:ISwipeImageModal) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {type} = useAppSelector(themeState);
 
   const dispatchAlbum = (band: AlbumDto) => {

@@ -3,9 +3,9 @@ import {ActivityIndicator, Animated, Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import {Header} from '../../components/Header/Header';
-import { useAppSelector } from '../../toolkitStore/reduxHooks';
-import { themeState } from '../../toolkitStore/themeReducer';
-import { albumState } from '../../toolkitStore/albumReducer';
+import { useAppSelector } from '../../store/reduxHooks';
+import { themeState } from '../../store/themeReducer';
+import { albumState } from '../../store/albumReducer';
 import theme from '../../global/styles/theme';
 
 import {

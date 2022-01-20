@@ -3,8 +3,8 @@ import {StyleSheet, Animated, Dimensions} from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
 
 import theme from '../../global/styles/theme';
-import { useAppSelector } from '../../toolkitStore/reduxHooks';
-import { themeState, ThemeType } from '../../toolkitStore/themeReducer';
+import { useAppSelector } from '../../store/reduxHooks';
+import { themeState, ThemeType } from '../../store/themeReducer';
 
 import {Container, Wrap,Name} from './_BandName';
 

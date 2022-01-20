@@ -11,8 +11,8 @@ import {AlbumDto} from '../../dtos/AlbumDto';
 import {getAlbums} from '../../services/api';
 import {storage} from '../../utils/storage';
 import {MainStack} from '../../routes/Route';
-import { useAppSelector } from '../../toolkitStore/reduxHooks';
-import { themeState } from '../../toolkitStore/themeReducer';
+import { useAppSelector } from '../../store/reduxHooks';
+import { themeState } from '../../store/themeReducer';
 
 import {Container} from './_Home';
 
