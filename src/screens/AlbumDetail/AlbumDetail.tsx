@@ -50,7 +50,7 @@ export const AlbumDetail = () => {
     extrapolate: 'clamp'
   });
 
-  const translateY = y;
+  const translateY = Animated.divide(y, 2);
 
   return (
     <Container>

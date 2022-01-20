@@ -43,10 +43,14 @@ export const Name = styled.Text<Props>`
   text-decoration: underline;
 `;
 
-export const Song = styled.Text<Props>`
+
+export const Duration = styled.Text<Props>`
   font-family: ${({theme}) => theme.fontFamily.regular};
   color: ${({theme, type}) => theme.colors[type].primary};
   font-size: ${RFPercentage(2)}px;
+`;
+
+export const Song = styled(Duration)`
   flex: 1;
 `;
 
@@ -57,10 +61,4 @@ export const Wrap = styled.View`
   align-items: center;
   margin-bottom: ${height * 0.01}px;
   padding-horizontal: ${width * 0.04}px;
-`;
-
-export const Duration = styled.Text<Props>`
-  font-family: ${({theme}) => theme.fontFamily.regular};
-  color: ${({theme, type}) => theme.colors[type].primary};
-  font-size: ${RFPercentage(2)}px;
 `;
